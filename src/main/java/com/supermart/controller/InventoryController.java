@@ -11,7 +11,6 @@ import com.supermart.service.InventoryService;
 
 @RestController
 @RequestMapping("/api/inventory")
-@CrossOrigin(origins = "http://localhost:5173")
 public class InventoryController {
 
     @Autowired
@@ -21,7 +20,6 @@ public class InventoryController {
     public Product addStock(
             @PathVariable Long productId,
             @RequestParam int quantity) {
-
         return inventoryService.addStock(productId, quantity);
     }
 
@@ -29,12 +27,12 @@ public class InventoryController {
     public Product adjustStock(
             @PathVariable Long productId,
             @RequestParam int quantity) {
-
         return inventoryService.adjustStock(productId, quantity);
     }
 
     @GetMapping("/{productId}/history")
-    public List<StockHistory> getHistory(@PathVariable Long productId) {
+    public List<StockHistory> getHistory(
+            @PathVariable Long productId) {
         return inventoryService.getStockHistory(productId);
     }
 
