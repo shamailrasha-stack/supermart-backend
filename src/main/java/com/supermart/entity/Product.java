@@ -10,14 +10,21 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false, unique = true)
     private String sku;
+
+    @Column(unique = true)
     private String barcode;
+
     private String description;
     private double price;
     private int stockQuantity;
     private int lowStockThreshold;
     private boolean active;
+
     @Column(length = 500)
     private String imageUrl;
 
@@ -106,6 +113,7 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
+
     public String getImageUrl() {
         return imageUrl;
     }
