@@ -1,5 +1,6 @@
 package com.supermart.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -10,6 +11,7 @@ public class SaleItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     private Sale sale;
 
@@ -17,9 +19,7 @@ public class SaleItem {
     private Product product;
 
     private int quantity;
-
     private double unitPrice;
-
     private double subtotal;
 
     public SaleItem() {
