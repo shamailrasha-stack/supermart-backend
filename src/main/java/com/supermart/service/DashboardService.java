@@ -1,7 +1,7 @@
 package com.supermart.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,15 +38,17 @@ public class DashboardService {
                 .filter(p -> p.getStockQuantity() <= p.getLowStockThreshold())
                 .count();
 
-        LocalDate today = LocalDate.now();
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Kolkata"));
 
         double todaysSales = sales.stream()
-                .filter(s -> s.getCreatedAt().toLocalDate().equals(today))
+                .filter(s -> s.getCreatedAt() != null
+                        && s.getCreatedAt().toLocalDate().equals(today))
                 .mapToDouble(Sale::getTotal)
                 .sum();
 
         long todaysTransactions = sales.stream()
-                .filter(s -> s.getCreatedAt().toLocalDate().equals(today))
+                .filter(s -> s.getCreatedAt() != null
+                        && s.getCreatedAt().toLocalDate().equals(today))
                 .count();
 
         Map<String, Double> last7Days = new LinkedHashMap<>();
@@ -56,7 +58,8 @@ public class DashboardService {
             LocalDate date = today.minusDays(i);
 
             double amount = sales.stream()
-                    .filter(s -> s.getCreatedAt().toLocalDate().equals(date))
+                    .filter(s -> s.getCreatedAt() != null
+                            && s.getCreatedAt().toLocalDate().equals(date))
                     .mapToDouble(Sale::getTotal)
                     .sum();
 

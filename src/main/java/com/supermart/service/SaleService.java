@@ -1,7 +1,7 @@
 package com.supermart.service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,16 +45,20 @@ public class SaleService {
 
         Sale sale = new Sale();
 
-        sale.setInvoiceNumber(
-                "INV-" + System.currentTimeMillis());
-
+        sale.setInvoiceNumber("INV-" + System.currentTimeMillis());
         sale.setCashier(cashier);
         sale.setDiscount(request.getDiscount());
-        sale.setCreatedAt(LocalDateTime.now());
+
+        sale.setCreatedAt(
+                LocalDateTime.now(ZoneId.of("Asia/Kolkata"))
+        );
+
         sale.setStatus(Sale.SaleStatus.COMPLETED);
 
         Sale.PaymentMethod paymentMethod =
-                Sale.PaymentMethod.valueOf(request.getPaymentMethod().toUpperCase());
+                Sale.PaymentMethod.valueOf(
+                        request.getPaymentMethod().toUpperCase()
+                );
 
         sale.setPaymentMethod(paymentMethod);
 
@@ -80,7 +84,8 @@ public class SaleService {
 
             if (requestItem.getQuantity() > product.getStockQuantity()) {
                 throw new RuntimeException(
-                        "Not enough stock for " + product.getName());
+                        "Not enough stock for " + product.getName()
+                );
             }
 
             double itemTotal =
@@ -99,7 +104,8 @@ public class SaleService {
             int oldStock = product.getStockQuantity();
 
             product.setStockQuantity(
-                    oldStock - requestItem.getQuantity());
+                    oldStock - requestItem.getQuantity()
+            );
 
             productRepository.save(product);
 
@@ -111,7 +117,10 @@ public class SaleService {
             history.setNewQuantity(product.getStockQuantity());
             history.setType(StockHistory.StockChangeType.SALE);
             history.setReason("Product sold");
-            history.setCreatedAt(LocalDateTime.now());
+
+            history.setCreatedAt(
+                    LocalDateTime.now(ZoneId.of("Asia/Kolkata"))
+            );
 
             stockHistoryRepository.save(history);
 
